@@ -22,7 +22,6 @@ THE SOFTWARE.
 """
 __all__ = ['nav_groups', 'Nav', 'NavOption']
 
-from django_nav.base import nav_groups, Nav, NavOption
 
 VERSION = (0, 6, 0, 'beta', 2)
 
@@ -34,6 +33,7 @@ def autodiscover():
     """
     import imp
     from django.conf import settings
+    from django_nav.base import nav_groups, Nav, NavOption
 
     for app in settings.INSTALLED_APPS:
         # For each app, we need to look for an tabs.py inside that app's
