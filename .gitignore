@@ -1,0 +1,13 @@
+*.pyc
+*.pyo
+*.nsi
+*.exe
+*.orig
+*.*~
+*.bak
+*.wpu
+*.bat
+*.zip
+build/
+dist/
+django_nav.egg-info/
