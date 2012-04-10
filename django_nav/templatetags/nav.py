@@ -2,7 +2,7 @@ import re
 
 from django import template
 
-from django_nav import nav_groups
+from django_nav.base import nav_groups
 
 register = template.Library()
 keyword_value_pair_regex = re.compile("((\w+)\s*=\s*)?(((?P<quote>'|\")(.*?)(?P=quote))|([^\s='\"]*))(?=(\s|$))")
@@ -81,7 +81,7 @@ class GetNavNode(template.Node):
             self.context[self.var_name].append(
                 template.loader.render_to_string(nav.template, {'nav': nav}))
 
-    def build_options(self, nav_options):
+    def build_options(self, nav_options, path):
         options = []
         for option in nav_options:
             option = option()
@@ -123,4 +123,9 @@ def get_nav(parser, token):
     }
     args['args'], args['kwargs'] = args_parser(' '.join(bits[bits.index(args['var_name'])+1:]))
 
+
+    print "No problem until here?"
+    testNode = GetNavNode(**args)
+    for mytest in testNode:
+        print mytest
     return GetNavNode(**args)
