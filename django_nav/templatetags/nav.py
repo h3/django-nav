@@ -96,7 +96,7 @@ class GetNavNode(template.Node):
 
             option.active = False
             option.active = option.active_if(option.get_absolute_url(), path)
-            option.option_list = self.build_options(option.options)
+            option.option_list = self.build_options(option.options, path)
             options.append(template.loader.render_to_string(option.template,
                                                             {'option': option}))
 
@@ -124,8 +124,8 @@ def get_nav(parser, token):
     args['args'], args['kwargs'] = args_parser(' '.join(bits[bits.index(args['var_name'])+1:]))
 
 
-    print "No problem until here?"
-    testNode = GetNavNode(**args)
-    for mytest in testNode:
-        print mytest
+    #print "No problem until here?"
+    #testNode = GetNavNode(**args)
+    #for mytest in testNode:
+    #    print mytest
     return GetNavNode(**args)
