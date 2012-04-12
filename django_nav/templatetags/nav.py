@@ -1,7 +1,7 @@
 import re
 
 from django import template
-from django_nav.base import nav_groups
+from django_nav.base import nav_groups, NavOption
 
 register = template.Library()
 
@@ -13,6 +13,13 @@ def get_nav(context, nav_group, *args, **kwargs):
         return conditional and not conditional(context,
                                            *of.conditional['args'],
                                            **of.conditional['kwargs'])
+
+    def build_dynamic_options(nav, path, *args, **kwargs):
+        out = []
+        for obj in nav.queryset:
+            # TODO: validate if dehydrate_option is declared
+            out.append(type('SubNavOption',(NavOption,), nav.dehydrate_option(obj)))
+        return out
 
     def build_options(nav_options, path, *args, **kwargs):
         out = []
@@ -34,8 +41,9 @@ def get_nav(context, nav_group, *args, **kwargs):
         if check_conditional(nav): continue
 
         path = context['request'].path
-        if hasattr(nav, 'template_name'):
-            nav.option_list = build_options(nav.options, path, template_name=nav.template_name)
+
+        if nav.queryset and len(nav.queryset) > 0:
+            nav.option_list = build_dynamic_options(nav, path)
         else:
             nav.option_list = build_options(nav.options, path)
 

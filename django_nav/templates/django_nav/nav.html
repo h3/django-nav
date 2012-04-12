@@ -3,11 +3,7 @@
     <div id="nav-{{ nv.view }}" class="nav-item {% if forloop.first %} nav-item-first{% endif %}{% if nv.active %} nav-item-active{% endif %}">
         <a href="{{ nv.get_absolute_url }}" title="" class="{% if forloop.first %}nav-item-first{% endif %}{% if nv.active %} nav-item-active{% endif %}">{{ nv.name }}</a>
         {% if nv.option_list %}
-        <ul class="options">
-            {% for option in nv.option_list %}
-            {{ option }}
-            {% endfor %}
-        </ul>
+        {% include "django_nav/nav.html" with nav_list=nv.option_list %}
         {% endif %}
     </div>
     {% endfor %}

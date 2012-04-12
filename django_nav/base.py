@@ -20,15 +20,27 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
+
+import copy
 from django.core.urlresolvers import reverse
 
 class NavType(object):
     name = u'I Forgot to Name this'
     view = None
+    queryset = None
     args = ()
     kwargs ={}
     options = []
     conditional = {'function': None, 'args': [], 'kwargs': {}}
+
+    def __init__(self, name=None, view=None, queryset=None, args=None, kwargs=None, options=None, conditional=None):
+        if name: self.name = name
+        if view: self.view = view
+        if queryset: self.queryset = queryset
+        if args: self.args = args
+        if kwargs: self.kwargs = kwargs
+        if options: self.options = options
+        if conditional: self.conditional = conditional
 
     def active_if(self, url, path):
         return path == url
@@ -41,10 +53,9 @@ class NavType(object):
         return '#'
 
 class NavOption(NavType):
-    template = 'django_nav/option.html'
+    pass
 
 class Nav(NavType):
-    template = 'django_nav/nav.html'
     nav_group = 'main'
 
 class NavGroups(object):
@@ -60,19 +71,23 @@ class NavGroups(object):
         """
             Register the given Nav
         """
-        try:
-            nav = nav()
-        except TypeError:
-            pass
+        if isinstance(nav, list):
+            for nv in nav:
+                self.register(nv)
+        else:
+            try:
+                nav = nav()
+            except TypeError:
+                pass
 
-        if not isinstance(nav, NavType):
-            raise TypeError("You can only register a Nav not a %r" % nav)
+            if not isinstance(nav, NavType):
+                raise TypeError("You can only register a Nav not a %r" % nav)
 
-        if not self._groups.has_key(nav.nav_group):
-            self._groups[nav.nav_group] = []
+            if not self._groups.has_key(nav.nav_group):
+                self._groups[nav.nav_group] = []
 
-        if nav not in self._groups[nav.nav_group]:
-            self._groups[nav.nav_group].append(nav)
+            if nav not in self._groups[nav.nav_group]:
+                self._groups[nav.nav_group].append(nav)
 
     def __getitem__(self, nav_group):
         return self._groups.get(nav_group, [])
