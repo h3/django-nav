@@ -42,6 +42,9 @@ class NavType(object):
         if options: self.options = options
         if conditional: self.conditional = conditional
 
+    def dehydrate_option(self, obj=None):
+        print 'Error: you must declare a method called "dehydrate_option" to with the queryset option'
+
     def active_if(self, url, path):
         return path == url
 

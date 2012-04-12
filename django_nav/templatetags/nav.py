@@ -17,8 +17,9 @@ def get_nav(context, nav_group, *args, **kwargs):
     def build_dynamic_options(nav, path, *args, **kwargs):
         out = []
         for obj in nav.queryset:
-            # TODO: validate if dehydrate_option is declared
-            out.append(type('SubNavOption',(NavOption,), nav.dehydrate_option(obj)))
+            option = type('SubNavOption',(NavOption,), nav.dehydrate_option(obj))()
+            option.active = option.active_if(option.get_absolute_url(), path)
+            out.append(option)
         return out
 
     def build_options(nav_options, path, *args, **kwargs):
