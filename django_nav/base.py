@@ -46,7 +46,10 @@ class NavType(object):
         print 'Error: you must declare a method called "dehydrate_option" to with the queryset option'
 
     def active_if(self, url, path):
-        return path == url
+        if url == '/':
+            return url == path
+        else:
+            return path.startswith(url)
 
     def get_absolute_url(self):
         if self.view:
