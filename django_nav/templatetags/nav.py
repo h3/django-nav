@@ -41,7 +41,11 @@ def get_nav(context, nav_group, *args, **kwargs):
     for nav in nav_groups[nav_group]:
         if check_conditional(nav): continue
 
-        path = context['request'].path
+        request = context.get('request', None)
+        if request:
+            path = context.get('request').path
+        else:
+            path = "/"
 
         if nav.queryset and len(nav.queryset) > 0:
             nav.option_list = build_dynamic_options(nav, path)
