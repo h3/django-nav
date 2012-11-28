@@ -16,7 +16,12 @@ def get_nav(context, nav_group, *args, **kwargs):
 
     def build_dynamic_options(nav, path, *args, **kwargs):
         out = []
-        for obj in nav.queryset:
+        if callable(nav.queryset):
+            queryset = nav.queryset()
+        else:
+            queryset = nav.queryset
+
+        for obj in queryset:
             option = type('SubNavOption',(NavOption,), nav.dehydrate_option(obj))()
             option.active = option.active_if(option.get_absolute_url(), path)
             out.append(option)
@@ -47,8 +52,17 @@ def get_nav(context, nav_group, *args, **kwargs):
         else:
             path = "/"
 
-        if nav.queryset and len(nav.queryset) > 0:
-            nav.option_list = build_dynamic_options(nav, path)
+        if nav.queryset:
+            if callable(nav.queryset):
+                queryset = nav.queryset()
+            else:
+                queryset = nav.queryset
+
+            if len(queryset) > 0:
+                nav.option_list = build_dynamic_options(nav, path)
+            else:
+                nav.option_list = build_options(nav.options, path)
+
         else:
             nav.option_list = build_options(nav.options, path)
 
