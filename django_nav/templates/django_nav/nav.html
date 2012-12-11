@@ -1,7 +1,7 @@
 <div class="nav-{{ nav_group }} {{ classname }}">
     {% for nv in nav_list %}
     <div class="nav-{{ nv.view }} nav-item {% if forloop.first %} nav-item-first{% endif %}{% if nv.active %} nav-item-active{% endif %}">
-        <a href="{{ nv.get_absolute_url }}" title="" class="{% if forloop.first %}nav-item-first{% endif %}{% if nv.active %} nav-item-active{% endif %}">{{ nv.name }}</a>
+        <a href="{{ nv.get_absolute_url }}{% if nv.getstring %}{{ nv.getstring }}{% endif %}" title="" class="{% if forloop.first %}nav-item-first{% endif %}{% if nv.active %} nav-item-active{% endif %}">{{ nv.name }}</a>
         {% if nv.option_list %}
         {% include "django_nav/nav.html" with nav_list=nv.option_list %}
         {% endif %}

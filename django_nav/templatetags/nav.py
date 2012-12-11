@@ -23,7 +23,10 @@ def get_nav(context, nav_group, *args, **kwargs):
 
         for obj in queryset:
             option = type('SubNavOption',(NavOption,), nav.dehydrate_option(obj))()
-            option.active = option.active_if(option.get_absolute_url(), path)
+            if option.getstring:
+                option.active = option.active_if(option.get_absolute_url() + option.getstring, path)
+            else:
+                option.active = option.active_if(option.get_absolute_url(), path)
             out.append(option)
         return out
 
